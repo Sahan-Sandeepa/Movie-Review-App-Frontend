@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 
 
-const Hero = ({movies}) => {
+const Hero = ({ movies }) => {
 
     const navigate = useNavigate();
 
@@ -19,9 +19,10 @@ const Hero = ({movies}) => {
     }
 
     if (!movies || movies.length === 0) {
-  return <p>Loading...</p>; // or display a message indicating no movies found
-}
+        return <p>Loading...</p>; // or display a message indicating no movies found
+    }
 
+    const link = "5PdEmeopJVQ"
 
     return (
         <div className='movie-carousel-container'>
@@ -41,13 +42,14 @@ const Hero = ({movies}) => {
                                                 <h4>{movie.title}</h4>
                                             </div>
                                             <div className="movie-buttons-container">
-                                                {/* <Link to={`/Trailer/${movie.trailerLink.substring(movie.trailerLink.length - 11)}`}> */}
+                                                {/* <Link to={`/Trailer/${movie.trailerLink && movie.trailerLink.substring(movie.trailerLink.length - 11)}`}> */}
+                                                <Link to={`/Trailer/${link && link.substring(link.length - 11)}`}>
                                                     <div className="play-button-icon-container">
                                                         <FontAwesomeIcon className="play-button-icon"
                                                             icon={faCirclePlay}
                                                         />
                                                     </div>
-                                                {/* </Link> */}
+                                                </Link>
 
                                                 <div className="movie-review-button-container">
                                                     <Button variant="info" onClick={() => reviews(movie.imdbId)} >Reviews</Button>

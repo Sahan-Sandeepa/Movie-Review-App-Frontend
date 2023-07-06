@@ -1,5 +1,7 @@
 import React from 'react'
 import './Hero.css'
+import axios from "axios";
+import { useState, useEffect } from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Paper } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 
 
-const Hero = ({ movies }) => {
+const Hero = ({movies}) => {
 
     const navigate = useNavigate();
 
@@ -16,11 +18,17 @@ const Hero = ({ movies }) => {
         navigate(`/Reviews/${movieId}`);
     }
 
+    if (!movies || movies.length === 0) {
+  return <p>Loading...</p>; // or display a message indicating no movies found
+}
+
+
     return (
         <div className='movie-carousel-container'>
             <Carousel>
                 {
                     movies?.map((movie) => {
+                        console.log(movie)
                         return (
                             <Paper key={movie.imdbId}>
                                 <div className='movie-card-container'>
@@ -33,13 +41,13 @@ const Hero = ({ movies }) => {
                                                 <h4>{movie.title}</h4>
                                             </div>
                                             <div className="movie-buttons-container">
-                                                <Link to={`/Trailer/${movie.trailerLink.substring(movie.trailerLink.length - 11)}`}>
+                                                {/* <Link to={`/Trailer/${movie.trailerLink.substring(movie.trailerLink.length - 11)}`}> */}
                                                     <div className="play-button-icon-container">
                                                         <FontAwesomeIcon className="play-button-icon"
                                                             icon={faCirclePlay}
                                                         />
                                                     </div>
-                                                </Link>
+                                                {/* </Link> */}
 
                                                 <div className="movie-review-button-container">
                                                     <Button variant="info" onClick={() => reviews(movie.imdbId)} >Reviews</Button>

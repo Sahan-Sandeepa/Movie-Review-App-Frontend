@@ -1,7 +1,7 @@
 import { Form, Button, FormGroup, FormLabel, FormControl } from 'react-bootstrap'
 import React from 'react'
 
-const reviewForm = ({handleSubmit, revText, lableText, defaultValue}) => {
+const ReviewForm = ({handleSubmit, revText, lableText, defaultValue}) => {
   return (
 <Form>
     <FormGroup className='mb-3' controlId='exampleForm.ControlTextarea1'>
@@ -15,4 +15,4 @@ const reviewForm = ({handleSubmit, revText, lableText, defaultValue}) => {
   )
 }
 
-export default reviewForm
+export default ReviewForm

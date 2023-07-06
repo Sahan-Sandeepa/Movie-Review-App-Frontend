@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import reviewForm from "../reviewForm/reviewForm";
-
-import React from 'react'
+import ReviewForm from "../reviewForm/ReviewForm";
+import React from 'react';
 
 const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
 
@@ -15,28 +14,48 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
         getMovieData(movieId);
     }, [])
 
-    const addReview = async (e) => {
+    // const addReview = async (e) => {
+    //     e.preventDefault();
+
+    //     const rev = revText.current;
+
+    //     try {
+    //         const response = await api.post("http://localhost:8080/api/v1/reviews", { reviewBody: rev.value, imdbId: movieId });
+
+    //         const updatedReviews = [...reviews, { body: rev.value }];
+
+    //         rev.value = "";
+
+    //         setReviews(updatedReviews);
+    //     }
+    //     catch (err) {
+    //         console.error(err);
+    //     }
+
+
+    // }
+
+    function addReview(e) {
         e.preventDefault();
 
         const rev = revText.current;
 
-        try {
-            const response = await api.post("/api/v1/reviews", { reviewBody: rev.value, imdbId: movieId });
+        const reviewData = {
+            reviewBody: rev.value,
+            imdbId: movieId
+        };
 
-            const updatedReviews = [...reviews, { body: rev.value }];
-
-            rev.value = "";
-
-            setReviews(updatedReviews);
-        }
-        catch (err) {
-            console.error(err);
-        }
-
-
-
-
+        axios.post("http://localhost:8080/api/v1/reviews", reviewData)
+            .then(response => {
+                const updatedReviews = [...reviews, { body: rev.value }];
+                rev.value = "";
+                setReviews(updatedReviews);
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
+
 
     return (
         <Container>

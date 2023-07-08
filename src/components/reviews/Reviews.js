@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
@@ -6,6 +6,7 @@ import ReviewForm from "../reviewForm/ReviewForm";
 import React from 'react';
 
 const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
+    const [review, setReview] = useState([])
     const revText = useRef();
     let params = useParams();
     let i = 0;
@@ -15,7 +16,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
         getMovieData(movieId);
     }, []);
 
-    function addReview(e) {
+    const addReview = (e) => {
         e.preventDefault();
 
         const rev = revText.current;
@@ -31,15 +32,22 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
                 const updatedReviews = [...reviews, { body: rev.value }];
                 rev.value = "";
                 setReviews(updatedReviews);
+                setReview(updatedReviews)
             })
             .catch(error => {
                 console.error(error);
             });
     }
 
+    const retriveReviews = () => {
+        
+    }
+
     if (!Array.isArray(reviews)) {
         reviews = []; // Initialize reviews as an empty array if it's not already an array
     }
+
+    console.log(review)
 
     return (
         <Container>
@@ -56,7 +64,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
                     <>
                         <Row>
                             <Col>
-                                <ReviewForm handleSubmit={addReview} revText={revText} labelText="Write a Review?" />
+                                <ReviewForm handleSubmit={addReview} revText={revText} lableText="Write a Review?" />
                             </Col>
                         </Row>
                         <Row>

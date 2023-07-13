@@ -31,7 +31,7 @@ function App() {
       .get("http://localhost:8080/api/v1/movies")
       .then((res) => {
         setMovies(res.data);
-        console.log(res)
+        // console.log(res)
       })
       .catch((error) => {
         console.log(error);

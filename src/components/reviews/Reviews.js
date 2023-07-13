@@ -6,7 +6,8 @@ import ReviewForm from "../reviewForm/ReviewForm";
 import React from 'react';
 
 const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
-    const [review, setReview] = useState([])
+    const [review, setReview] = useState([]);
+    const [getreview, setGetReview] = useState([]);
     const revText = useRef();
     let params = useParams();
     let i = 0;
@@ -16,6 +17,23 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
         getMovieData(movieId);
     }, []);
 
+    const getSingleMovieData = () => {
+        axios
+            .get(`http://localhost:8080/api/v1/movies/${movieId}`)
+            .then((res) => {
+                setGetReview(res.data?.reviewIds);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    useEffect(() => {
+        getSingleMovieData();
+        const interval = setInterval(getSingleMovieData, 5000); // Fetch data every 5 seconds
+        return () => clearInterval(interval); // Clear interval on component unmount
+    }, [movieId]);
+
     const addReview = (e) => {
         e.preventDefault();
 
@@ -23,31 +41,25 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
 
         const reviewData = {
             reviewBody: rev.value,
-            imdbId: movieId
+            imdbId: movieId,
         };
 
         axios
             .post("http://localhost:8080/api/v1/reviews", reviewData)
-            .then(response => {
+            .then((response) => {
                 const updatedReviews = [...reviews, { body: rev.value }];
                 rev.value = "";
                 setReviews(updatedReviews);
-                setReview(updatedReviews)
+                setReview(updatedReviews);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
-    }
-
-    const retriveReviews = () => {
-        
-    }
+    };
 
     if (!Array.isArray(reviews)) {
         reviews = []; // Initialize reviews as an empty array if it's not already an array
     }
-
-    console.log(review)
 
     return (
         <Container>
@@ -73,18 +85,20 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
                             </Col>
                         </Row>
                     </>
-                    {reviews.map(r => (
-                        <div key={i = i + 1}>
-                            <Row>
-                                <Col>{r.body}</Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <hr />
-                                </Col>
-                            </Row>
-                        </div>
-                    ))}
+                    {getreview?.map((r, index) => {
+                        return (
+                            <div key={index}>
+                                <Row>
+                                    <Col>{r.body}</Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <hr />
+                                    </Col>
+                                </Row>
+                            </div>
+                        );
+                    })}
                 </Col>
             </Row>
             <Row>
@@ -95,6 +109,5 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
         </Container>
     );
 };
-
 
 export default Reviews

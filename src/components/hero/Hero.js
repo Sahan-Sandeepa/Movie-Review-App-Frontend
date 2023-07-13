@@ -17,7 +17,6 @@ const Hero = ({ movies }) => {
     function reviews(movieId) {
         navigate(`/Reviews/${movieId}`);
     }
-
     if (!movies || movies.length === 0) {
         return <p>Loading...</p>; // or display a message indicating no movies found
     }
@@ -29,7 +28,7 @@ const Hero = ({ movies }) => {
             <Carousel>
                 {
                     movies?.map((movie) => {
-                        console.log(movie)
+                        console.log(movie.reviewIds.body)
                         return (
                             <Paper key={movie.imdbId}>
                                 <div className='movie-card-container'>

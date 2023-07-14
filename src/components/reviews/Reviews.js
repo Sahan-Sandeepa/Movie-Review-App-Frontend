@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import ReviewForm from "../reviewForm/ReviewForm";
 import React from 'react';
 
-const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
+const Reviews = ({ getMovieData, movie, reviews = [], setReviews }) => {
     const [review, setReview] = useState([]);
     const [getreview, setGetReview] = useState([]);
     const revText = useRef();
     let params = useParams();
-    let i = 0;
     const movieId = params.movieId;
 
     useEffect(() => {
@@ -19,18 +18,18 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
 
     const getSingleMovieData = () => {
         axios
-            .get(`http://localhost:8080/api/v1/movies/${movieId}`)
+            .get(`http://localhost:8080/api/v1/reviews/movies/${movieId}`)
             .then((res) => {
-                setGetReview(res.data?.reviewIds);
+                setGetReview(res.data);
             })
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }
 
     useEffect(() => {
         getSingleMovieData();
-        const interval = setInterval(getSingleMovieData, 5000); // Fetch data every 5 seconds
+        const interval = setInterval(getSingleMovieData, 1000); // Fetch data every 5 seconds
         return () => clearInterval(interval); // Clear interval on component unmount
     }, [movieId]);
 
@@ -47,7 +46,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
         axios
             .post("http://localhost:8080/api/v1/reviews", reviewData)
             .then((response) => {
-                const updatedReviews = [...reviews, { body: rev.value }];
+                const updatedReviews = [...(reviews || []), { body: rev.value }];
                 rev.value = "";
                 setReviews(updatedReviews);
                 setReview(updatedReviews);
@@ -57,8 +56,16 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
             });
     };
 
-    if (!Array.isArray(reviews)) {
-        reviews = []; // Initialize reviews as an empty array if it's not already an array
+
+    const deleteReview = (id) => {
+        axios
+            .delete("http://localhost:8080/api/v1/reviews/" + id)
+            .then(() => {
+                alert("Document Deleted Successfully!");
+            })
+            .catch(() => {
+                alert("Error Occurred On Delete");
+            });
     }
 
     return (
@@ -85,20 +92,22 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
                             </Col>
                         </Row>
                     </>
-                    {getreview?.map((r, index) => {
-                        return (
-                            <div key={index}>
-                                <Row>
-                                    <Col>{r.body}</Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <hr />
-                                    </Col>
-                                </Row>
-                            </div>
-                        );
-                    })}
+                    {getreview?.map((r, index) => (
+                        <div key={index}>
+                            <Row>
+                                <Col>{r.body}</Col>
+                                <Button>Edit</Button>
+                                <Button onClick={() =>
+                                    deleteReview(r.id)
+                                }>Delete</Button>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <hr />
+                                </Col>
+                            </Row>
+                        </div>
+                    ))}
                 </Col>
             </Row>
             <Row>
@@ -110,4 +119,5 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
     );
 };
 
-export default Reviews
+
+export default Reviews;

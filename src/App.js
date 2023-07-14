@@ -10,6 +10,7 @@ import Trailer from './components/trailer/Trailer';
 // import NotFound from './components/notFound/NotFound';
 import Reviews from './components/reviews/Reviews';
 import Footer from './components/footer/Footer'
+import LoginRegistrationPage from './components/user-authentication/User';
 
 function App() {
 
@@ -83,6 +84,7 @@ function App() {
           <Route path="/Trailer/:ytTrailerId" element={<Trailer />}></Route>
           <Route path="/Reviews/:movieId" element={<Reviews getMovieData={getMovieData} movie={movie} reviews={reviews} setReviews={setReviews} />}></Route>
           {/* <Route path="*" element={<NotFound />}></Route> */}
+          <Route path="/LoginRegistration" element={<LoginRegistrationPage />} />
         </Route>
       </Routes>
       <Footer />

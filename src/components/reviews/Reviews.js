@@ -91,7 +91,7 @@ const Reviews = ({ getMovieData, movie, reviews = [], setReviews }) => {
                 </Col>
                 <Col>
                     <Container className="mb-3">
-                        <h1 className="text-left text-white mb-3">Reviews</h1>
+                        <h1 className="text-left text-white mb-3">Review</h1>
                         <Form>
                             <Form.Group className="mb-3" controlId="reviewBody">
                                 <FormControl
@@ -105,15 +105,15 @@ const Reviews = ({ getMovieData, movie, reviews = [], setReviews }) => {
 
                             <div className="text-center">
                                 {editingReview ? (
-                                    <Button className="me-2" variant='outline-warning' onClick={updateReview}>
+                                    <Button className="me-2" variant='warning' onClick={updateReview}>
                                         Update
                                     </Button>
                                 ) : (
-                                    <Button className="me-2" variant='outline-info' onClick={addReview}>
+                                        <Button className="me-2" variant='outline-info' onClick={addReview}>
                                         Submit
                                     </Button>
                                 )}
-                                <Button variant="danger" onClick={() => setEditingReview(null)}>
+                                <Button variant="outline-danger" onClick={() => setEditingReview(null)}>
                                     Cancel
                                 </Button>
                             </div>
@@ -122,24 +122,23 @@ const Reviews = ({ getMovieData, movie, reviews = [], setReviews }) => {
                     <br />
                     {getreview?.map((review, index) => (
                         <div key={index}>
-                            <Row>
+                            <Row className="align-items-center">
                                 <Col>{review.body}</Col>
-                                <Button
-                                    className="me-2"
-                                    variant="warning"
-                                    onClick={() => editReview(review)}
-                                    style={{ backgroundColor: "#ffc107" }}
-                                >
-                                    Edit
-                                </Button>
-
-                                <Button
-                                    variant="danger"
-                                    onClick={() => deleteReview(review.id)}
-                                    style={{ backgroundColor: "#dc3545" }}
-                                >
-                                    Delete
-                                </Button>
+                                <Col className="text-end">
+                                    <Button
+                                        className="me-2"
+                                        variant="outline-warning"
+                                        onClick={() => editReview(review)}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        variant="outline-danger"
+                                        onClick={() => deleteReview(review.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </Col>
                             </Row>
                             <Row>
                                 <Col>
